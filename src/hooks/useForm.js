@@ -9,6 +9,11 @@ export const useForm = ( initialForm = {}, formValidations = {} ) => {
         createValidators();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formState])
+    
+    useEffect(() => {
+      setFormState(initialForm);
+    }, [initialForm])
+    
 
     const isFormValid = useMemo( () => { // useMemo se utiliza para memorizar el valor que retorne el forOf
 

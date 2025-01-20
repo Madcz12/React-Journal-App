@@ -1,45 +1,46 @@
-import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
-import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
+import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
+import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
 import { startLogout } from '../../store/auth';
 
 
-// eslint-disable-next-line react/prop-types
-export const Navbar = ({drawerWidth = 240}) => {
+export const NavBar = ({ drawerWidth = 240 }) => {
 
     const dispatch = useDispatch();
 
     const onLogout = () => {
-        dispatch(startLogout());
+        dispatch( startLogout() );
     }
+
 
   return (
     <AppBar 
-    position='fixed'
-    sx={{
-        width: {sm: `calc(100% - ${drawerWidth}px)`},
-        ml: {sm: `${drawerWidth}px`}
-    }}
-    >Navbar
+        position='fixed'
+        sx={{ 
+            width: { sm: `calc(100% - ${ drawerWidth }px)` },
+            ml: { sm: `${ drawerWidth }px` }
+         }}
+    >
         <Toolbar>
             <IconButton
                 color='inherit'
-                edge='start'
-                sx={{mr: 2, display: {sm :"none"}}}
+                edge="start"
+                sx={{ mr: 2, display: { sm: 'none' } }}
             >
-                <MenuOutlined/>
+                <MenuOutlined />
             </IconButton>
 
             <Grid container direction='row' justifyContent='space-between' alignItems='center'>
-                <Typography variant='h6' noWrap component='div'>Journal App</Typography>
+                <Typography variant='h6' noWrap component='div'> JournalApp </Typography>
+
                 <IconButton 
                     color='error'
-                    onClick={onLogout}
+                    onClick={ onLogout }
                 >
-                    <LogoutOutlined/>
+                    <LogoutOutlined />
                 </IconButton>
-                
             </Grid>
+
         </Toolbar>
     </AppBar>
   )

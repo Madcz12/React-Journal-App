@@ -1,127 +1,121 @@
 import { useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
-import { AuthLayout } from '../layout/AuthLayout';
-import { Google } from '@mui/icons-material';
 import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Google } from '@mui/icons-material';
 
-import { useForm } from '../../hooks/useForm';
+import { AuthLayout } from '../layout/AuthLayout';
+
+import { useForm } from '../../hooks';
 import { startGoogleSignIn, startLoginWithEmailPassword } from '../../store/auth';
-import { useSelector } from "react-redux"
 
 const formData = {
-  email: '', 
+  email: '',
   password: ''
 }
 
+
 export const LoginPage = () => {
 
-  const { status, errorMessage } = useSelector(state => state.auth);
+  const { status, errorMessage } = useSelector( state => state.auth );
 
   const dispatch = useDispatch();
-  //const { isChecked } = useSelector(state => state.status);
+  const { email, password, onInputChange } = useForm(formData);
 
-  const {email, password, onInputChange } = useForm(formData);
+  const isAuthenticating = useMemo( () => status === 'checking', [status]);
 
-  const isAuthenticating = useMemo( () => status === 'checking', [ status ] );
-  //const isCheckingAuthentication = useMemo( () => status === 'checking', [status] );
-
-  const onSubmit = (event) => {
+  const onSubmit = ( event ) => {
     event.preventDefault();
-    //console.log({email, password});
-    //! No es esta la acción a despachar
-    dispatch(startLoginWithEmailPassword({ email, password }));
+
+    console.log({ email, password })
+    dispatch( startLoginWithEmailPassword({ email, password }) );
   }
 
   const onGoogleSignIn = () => {
     console.log('onGoogleSignIn');
-    dispatch(startGoogleSignIn());
+    dispatch( startGoogleSignIn() );
   }
 
-/*   useEffect(() => {
-
-    dispatch(checkingAuthentication());
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) */
-  
 
   return (
     <AuthLayout title="Login">
-        <form onSubmit={onSubmit} className='animate__animated animate__fadeIn animate__faster'>
+      <form aria-label="submit-form" onSubmit={ onSubmit } className='animate__animated animate__fadeIn animate__faster'>
           <Grid container>
-            <Grid item xs={12} sx={{mt:2}}>
+            <Grid item xs={ 12 } sx={{ mt: 2 }}>
               <TextField 
                 label="Correo" 
                 type="email" 
-                placeholder="correo@google.com"
+                placeholder='correo@google.com' 
                 fullWidth
                 name="email"
-                value={email}
-                onChange={onInputChange}
+                value={ email }
+                onChange={ onInputChange }
               />
             </Grid>
 
-            <Grid item xs={12} sx={{mt:2}}>
+            <Grid item xs={ 12 } sx={{ mt: 2 }}>
               <TextField 
                 label="Contraseña" 
                 type="password" 
-                placeholder="contraseña"
+                placeholder='Contraseña' 
                 fullWidth
                 name="password"
-                value={password}
-                onChange={onInputChange}
+                inputProps={{
+                  'data-testid': 'password'
+                }}
+                value={ password }
+                onChange={ onInputChange }
               />
             </Grid>
 
-            <Grid container display={ !!errorMessage ? '' : 'none' }
-                  sx={{mt:1}}
-            >
+
+            <Grid 
+              container
+              display={ !!errorMessage ? '': 'none' }
+              sx={{ mt: 1 }}>
               <Grid 
-                item 
-                xs={12} 
-                sm={6}
-              >
+                  item 
+                  xs={ 12 }
+                >
                 <Alert severity='error'>{ errorMessage }</Alert>
               </Grid>
             </Grid>
-
-            <Grid container spacing={2} sx={{mb:2, mt:1}}>
-              <Grid item xs={12} sm={6}>
+            
+            <Grid container spacing={ 2 } sx={{ mb: 2, mt: 1 }}>
+              <Grid item xs={ 12 } sm={ 6 }>
                 <Button
-                  disabled={isAuthenticating }
+                  disabled={ isAuthenticating }
                   type="submit" 
-                  variant="contained" 
-                  fullWidth
-                >
+                  variant='contained' 
+                  fullWidth>
                   Login
                 </Button>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={ 12 } sm={ 6 }>
                 <Button
-                  disabled={isAuthenticating } 
-                  onClick={onGoogleSignIn} 
-                  variant="contained" 
-                  fullWidth
-                >
+                   disabled={ isAuthenticating }
+                   variant='contained' 
+                   fullWidth
+                   aria-label="google-btn"
+                   onClick={ onGoogleSignIn }>
                   <Google />
-                  <Typography sx={{ml:1}}>
-                    Google
-                  </Typography>
+                  <Typography sx={{ ml: 1 }}>Google</Typography>
                 </Button>
               </Grid>
             </Grid>
 
+
+            <Grid container direction='row' justifyContent='end'>
+              <Link component={ RouterLink } color='inherit' to="/auth/register">
+                Crear una cuenta
+              </Link>
+            </Grid>
+
           </Grid>
-          
-          <Grid container direction='row' justifyContent='end'>
-            <Link component={RouterLink} color='inherit' to="/auth/register">
-              Crear una cuenta
-            </Link>
-          </Grid>
+
 
         </form>
-    </AuthLayout>
 
+    </AuthLayout>
   )
 }

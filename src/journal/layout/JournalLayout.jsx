@@ -1,23 +1,26 @@
-import { Box, Toolbar } from "@mui/material";
-import { Navbar as NavBar, SideBar} from "../components";
+import { Toolbar } from '@mui/material';
+import { Box } from '@mui/system'
+import { NavBar, SideBar } from '../components';
 
-const drawerWidth = 240;
 
-// eslint-disable-next-line react/prop-types
-export const JournalLayout = ({children}) => {
+const drawerWidth = 280;
+
+export const JournalLayout = ({ children }) => {
   return (
-    <Box sx={{display: 'flex'}} className='animate__animated animate__fadeIn animate__faster'>
-        <NavBar drawerWidth ={drawerWidth}/>
+    <Box sx={{ display: 'flex' }} className='animate__animated animate__fadeIn animate__faster'>
 
-        <SideBar drawerWidth={drawerWidth}/>
-        {/* Sidebar drawerWidth*/}
+        <NavBar drawerWidth={ drawerWidth } />
 
-        <Box
+        <SideBar drawerWidth={ drawerWidth } />
+
+        <Box 
             component='main'
-            sx={{flexGrow: 1, p:3}}
+            sx={{ flexGrow: 1, p: 3 }}
         >
-            <Toolbar/>
-            {children}
+            <Toolbar />
+
+            { children }
+            
         </Box>
     </Box>
   )
